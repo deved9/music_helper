@@ -4,7 +4,8 @@
 exec(open("venv/bin/activate_this.py").read(), {'__file__': "venv/bin/activate_this.py"})
 
 #For YT downloading
-from pytube import Playlist
+from pytube import Playlist, YouTube
+import re
 import os, sys, time
 from multiprocessing import Process, Queue, active_children
 
@@ -75,7 +76,7 @@ Modes:
 (3) Only clear ID3 tags''',
 formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-r','--recurse', help='recurse into subfolders (only for mode 2 and 3)', action='store_true')
-    parser.add_argument('mode',help='select mode of operation')
+    parser.add_argument('mode',help='select mode of operation',default=1)
     parser.add_argument('-l','--link',help='link to YouTube playlist to download (only for mode 1)', action='store')
     
     args = parser.parse_args()
@@ -84,8 +85,7 @@ formatter_class=argparse.RawTextHelpFormatter)
     
     mode = args.mode #input("Co chcete udělat: ")
     if(mode == "1"):
-        #global PLAYLIST_URL
-        #PLAYLIST_URL = input("Vložte URL adresu Youtube playlistu pro stažení: ")
+        global PLAYLIST_URL
         PLAYLIST_URL = args.link
         if not args.link: parser.error('Link not provided or wrong mode selected')
         
@@ -99,8 +99,8 @@ formatter_class=argparse.RawTextHelpFormatter)
         down_queue = Queue()
         conv_queue = Queue()
 
-        for vid in pl.videos:
-            down_queue.put(vid)
+        for video in pl.videos:
+            down_queue.put(video)
 
         # Create download workers
         num_workers = 5
