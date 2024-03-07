@@ -58,7 +58,7 @@ def iterate_in_folder(path, recurse):
                 mp3.delete()
                 mp3.save()
                 audio = EasyID3(os.path.join(path,item))
-                audio["artist"] = item[:item.index("-")-1] if item[:item.index("-")-1] else None
+                audio["artist"] = item[:item.index(" - ")-2] if item[:item.index(" - ")-2] else None
                 audio['genre'] = ''
                 audio['title'] = item[:item.index(".mp3")]
                 audio['date'] = ''
