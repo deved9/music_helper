@@ -4,7 +4,7 @@
 exec(open("venv/bin/activate_this.py").read(), {'__file__': "venv/bin/activate_this.py"})
 
 #For YT downloading
-from pytube import Playlist, YouTube
+from pytubefix import Playlist, YouTube
 import re
 import os, sys, time
 from multiprocessing import Process, Queue, active_children
@@ -58,7 +58,7 @@ def iterate_in_folder(path, recurse):
                 mp3.delete()
                 mp3.save()
                 audio = EasyID3(os.path.join(path,item))
-                audio["artist"] = item[:item.index(" - ")-2] if item[:item.index(" - ")-2] else None
+                audio["artist"] = item[:item.index(" - ")] if item[:item.index(" - ")] else None
                 audio['genre'] = ''
                 audio['title'] = item[:item.index(".mp3")]
                 audio['date'] = ''
@@ -103,7 +103,7 @@ formatter_class=argparse.RawTextHelpFormatter)
             down_queue.put(video)
 
         # Create download workers
-        num_workers = 5
+        num_workers = 8
         down_workers = []
         conv_workers = []
         try:
